@@ -5,36 +5,43 @@ import ru.yandex.practicum.catsgram.exceptions.InvalidEmailException;
 import ru.yandex.practicum.catsgram.exceptions.UserAlreadyExistException;
 import ru.yandex.practicum.catsgram.model.User;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Service
 public class UserService {
-    private final HashSet<User> users = new HashSet<>();
+    private final Map<String, User> users = new HashMap<>();
 
-    public HashSet<User> findAll() {
-        return users;
+    public Collection<User> findAll() {
+        return users.values();
     }
 
     public User create(User user) {
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new InvalidEmailException("Неверно указан email");
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new InvalidEmailException("Адрес электронной почты не может быть пустым.");
         }
-        for (User user1 : users) {
-            if (user1.equals(user)) {
-                throw new UserAlreadyExistException("Пользователь с таким email уже существует.");
-            }
+        if (users.containsKey(user.getEmail())) {
+            throw new UserAlreadyExistException("Пользователь с электронной почтой " +
+                    user.getEmail() + " уже зарегистрирован.");
         }
-        users.add(user);
+        users.put(user.getEmail(), user);
         return user;
     }
 
     public User addOrUpdate(User user) {
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new InvalidEmailException("Неверно указан email.");
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new InvalidEmailException("Адрес электронной почты не может быть пустым.");
         }
-        users.removeIf(user1 -> user1.hashCode() == user.hashCode());
-        users.add(user);
+        users.put(user.getEmail(), user);
+
         return user;
     }
-
+    public User findUserByEmail(String email) {
+        if (email == null) {
+            return null;
+        }
+        return users.get(email);
+    }
 }

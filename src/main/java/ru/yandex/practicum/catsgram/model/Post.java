@@ -8,11 +8,21 @@ public class Post {
     private final Instant creationDate = Instant.now(); // дата создания
     private String description; // описание
     private String photoUrl; // url-адрес фотографии
+    private Integer id;//идентификатор
+
 
     public Post(String author, String description, String photoUrl) {
         this.author = author;
         this.description = description;
         this.photoUrl = photoUrl;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAuthor() {

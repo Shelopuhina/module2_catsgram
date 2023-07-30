@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.model.User;
 import ru.yandex.practicum.catsgram.service.UserService;
 
+import java.util.Collection;
 import java.util.HashSet;
 
 @RestController
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping
-    public HashSet<User> findAll() {
+    public Collection<User> findAll() {
         return userService.findAll();
     }
 
